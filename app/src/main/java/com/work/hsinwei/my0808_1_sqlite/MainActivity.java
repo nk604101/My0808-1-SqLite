@@ -22,12 +22,29 @@ public class MainActivity extends AppCompatActivity {
         CopyDatabase();
 
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH.toString(),null);
-        Cursor c = db.rawQuery("Select * from contacts",null);
-        c.moveToFirst();
+        Cursor c = db.rawQuery("Select * from contacts",null);  //選取 contacts 內所有欄位表
+        c.moveToFirst();    //讓選取的列由BOF(begin of Form 欄位名稱列) 移到第一列
+        Log.d("T0808-DB-[start]","do-while");
         do{
+            int id = c.getInt(0);
             String str = c.getString(1);
-            Log.d("T0808-DB",str);
-        }while(c.moveToNext());
+            int score = c.getInt(2);
+            Log.d("T0808-DB-[0]",""+id);
+            Log.d("T0808-DB-[1]",str);
+            Log.d("T0808-DB-[2]",""+score);
+        }while(c.moveToNext()); //執行 moveToNext() 若是沒有下一筆資料則傳回 false
+        /*
+        Log.d("T0808-DB-[start]","while");
+        c.moveToPosition(-1);   //BOF 是-1
+        while (c.moveToNext())  //會先執行 moveToNext() 所以要從BOF開始才會是第一筆資料
+        {
+            int id = c.getInt(0);
+            String str = c.getString(1);
+            int score = c.getInt(2);
+            Log.d("T0808-DB-[0]",""+id);
+            Log.d("T0808-DB-[1]",str);
+            Log.d("T0808-DB-[2]",""+score);
+        }*/
     }
 
     private void CopyDatabase()
@@ -35,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         final int BUFFER_SIZE=400000;
         final String DB_NAME = "test1.sqlite";   //保存的資料庫檔案名
         String PACKAGE_NAME = getPackageName();
+        Log.d("T0808-DB-PG_Name",PACKAGE_NAME);
         DB_PATH = getDatabasePath(DB_NAME);
-        Log.d("T0808-DB",DB_PATH.toString());
+        Log.d("T0808-DB-Path_Name",DB_PATH.toString());
 
         //當路徑不存在 建立路徑
         if(!(DB_PATH.exists()))
